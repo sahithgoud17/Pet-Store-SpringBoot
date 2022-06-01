@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignupController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pet-Store</a> &gt; <a href="index.source.html" class="el_package">com.sahith.controller</a> &gt; <span class="el_source">SignupController.java</span></div><h1>SignupController.java</h1><pre class="source lang-java linenums">package com.sahith.controller;
+
+import com.sahith.services.interfaces.CustomerService;
+import com.sahith.utilities.CustomerSignUp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
+
+@Controller
+<span class="nc" id="L16">public class SignupController {</span>
+
+    @Autowired
+    private CustomerService customerService;
+
+    @GetMapping(&quot;/signup&quot;)
+    public String showFormForCustomerSignup(Model model) {
+<span class="nc" id="L23">        CustomerSignUp customer = new CustomerSignUp();</span>
+<span class="nc" id="L24">        String str = &quot;https://st.depositphotos.com/1031343/2194/v/600/depositphotos_21949883-stock-illustration-pet-shop-stamp.jpg&quot;;</span>
+<span class="nc" id="L25">        model.addAttribute(&quot;str&quot; , str);</span>
+<span class="nc" id="L26">        model.addAttribute(&quot;customer&quot;, customer);</span>
+<span class="nc" id="L27">        model.addAttribute(&quot;error&quot;, false);</span>
+<span class="nc" id="L28">        return &quot;customer-signup&quot;;</span>
+    }
+
+    @PostMapping(&quot;/signup&quot;)
+    public String addCustomer(@Valid @ModelAttribute(&quot;customer&quot;) CustomerSignUp customer, BindingResult result, Model model) {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if(result.hasErrors()) {</span>
+<span class="nc" id="L34">            return &quot;customer-signup&quot;;</span>
+        }
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        else  if(!customerService.isNewEmail(customer.getEmail())) {</span>
+<span class="nc" id="L37">            String str = &quot;https://st.depositphotos.com/1031343/2194/v/600/depositphotos_21949883-stock-illustration-pet-shop-stamp.jpg&quot;;</span>
+<span class="nc" id="L38">            model.addAttribute(&quot;str&quot; , str);</span>
+<span class="nc" id="L39">            model.addAttribute(&quot;error&quot;, true);</span>
+<span class="nc" id="L40">            model.addAttribute(&quot;signedUp&quot;, false);</span>
+<span class="nc" id="L41">            return &quot;customer-signup&quot;;</span>
+        }
+<span class="nc" id="L43">        customer.setId(0);</span>
+<span class="nc" id="L44">        String str = &quot;https://st.depositphotos.com/1031343/2194/v/600/depositphotos_21949883-stock-illustration-pet-shop-stamp.jpg&quot;;</span>
+<span class="nc" id="L45">        model.addAttribute(&quot;str&quot; , str);</span>
+<span class="nc" id="L46">        model.addAttribute(&quot;error&quot;, false);</span>
+<span class="nc" id="L47">        model.addAttribute(&quot;signedUp&quot;, true);</span>
+<span class="nc" id="L48">        customerService.save(customer);</span>
+<span class="nc" id="L49">        return &quot;customer-signin&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

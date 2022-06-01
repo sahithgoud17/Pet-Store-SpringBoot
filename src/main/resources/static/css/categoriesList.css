@@ -1,0 +1,47 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: table
+}
+
+.categories {
+    align-items: center;
+    width: 100%;
+}
+
+.categories button {
+    border: none;
+    background-color: white;
+    padding: 0;
+    float: left;
+    margin: 1% 2%;
+}
+
+.unselectedCategory {
+    color: maroon;
+    font-size:20px;
+}
+
+.selectedCategory {
+    color: grey;
+    font-size:20px;
+}
+
+.categories button:hover {
+    color: grey;
+}
+
+.addButton {
+    width: 100%;
+    text-align: center;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.addButton button{
+    background-color: maroon;
+    color: white;
+    border: none;
+}

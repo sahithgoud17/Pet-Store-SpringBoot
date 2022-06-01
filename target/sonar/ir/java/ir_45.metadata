@@ -1,0 +1,2 @@
+com.sahith.services.implementations.CustomerServiceImpl#isNewEmail(Ljava/lang/String;)Z
+java.lang.String#equals(Ljava/lang/Object;)Z

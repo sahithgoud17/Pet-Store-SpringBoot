@@ -1,0 +1,54 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: table
+}
+
+.navItems form, .navItems form div {
+    display: inline;
+}
+
+.navBar {
+    width: 100%;
+    background-color: darkgrey;
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.navItems {
+    width: 100%;
+}
+
+.navItems button {
+    float:right;
+    color: maroon;
+    background-color: darkgrey;
+    text-align: center;
+    margin: 0% 2%;
+    border: none;
+    padding: 0%;
+    font-size: 25px;
+}
+
+.navItem button {
+    color: maroon;
+    background-color: darkgrey;
+    text-align: center;
+    margin: 0% 2%;
+    border: none;
+    padding: 0%;
+    font-size: 25px;
+}
+
+.navItems button:hover {
+    border-bottom: 1px solid white;
+}
+
+.head {
+    color:maroon;
+    font-size:25px;
+    text-align:center;
+}

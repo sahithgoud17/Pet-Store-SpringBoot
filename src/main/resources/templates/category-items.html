@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:security="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/itemsList.css}"/>
+    <link rel="stylesheet" th:href="@{/css/categoriesList.css}"/>
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <title>Pet Store</title>
+
+</head>
+<body>
+<nav class="navBar">
+    <h1 class="head" th:text="'Welcome ' + ${curName}"></h1>
+    <div class="navItems">
+        <form th:action="@{/logout}" method="POST" sec:authorize="hasAnyAuthority('USER','ADMIN')">
+            <div>
+                <button type="submit">Logout</button>
+            </div>
+        </form>
+        <form th:action="@{/admin/orders}" method="POST" sec:authorize="hasAuthority('ADMIN')">
+            <div>
+                <button type="submit">Orders</button>
+            </div>
+        </form>
+        <form th:action="@{/user/orders}" method="POST" sec:authorize="hasAuthority('USER')">
+            <div>
+                <button type="submit">My Orders</button>
+            </div>
+        </form>
+        <form th:action="@{/user/cart}" method="POST" sec:authorize="hasAuthority('USER')">
+            <div>
+                <button type="submit">Cart</button>
+            </div>
+        </form>
+        <form th:action="@{/home}" method="POST" class="navButton">
+            <div>
+                <button type="submit">Home</button>
+            </div>
+        </form>
+    </div>
+</nav><br>
+
+    <nav class="navBar">
+    <div class="navItems" sec:authorize="hasAuthority('ADMIN')">
+        <form th:action="@{'/admin/addCategoryForm'}" method="POST">
+            <div>
+                <button type="submit" th:text="'+ Add Category'"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="navItems" th:if="${categoryId!=null}" sec:authorize="hasAuthority('ADMIN')">
+        <form th:action="@{'/admin/'+${categoryId}+'/addItem'}" method="POST">
+            <div>
+                <button type="submit" th:text="'+ Add Item'"></button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="navItems" th:if="${categoryId!=null}" sec:authorize="hasAuthority('ADMIN')">
+        <form th:action="@{'/admin/categories/'+${categoryId}}" method="POST">
+            <div>
+                <button type="submit" th:text="'Delete Category'"></button>
+            </div>
+        </form>
+    </div>
+    </nav>
+
+
+
+    <div th:each="temp : ${categories}" class="categories">
+        <form th:action="@{'/categories/'+${temp.id}}" method="POST">
+            <div>
+                <button type="submit" th:text="${temp.name}" th:if="${categoryId==null || categoryId!=temp.id}" class="unselectedCategory"></button>
+                <button type="submit" th:text="${temp.name}" th:if="${categoryId!=null && categoryId==temp.id}" class="selectedCategory"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="itemList">
+        <h1 th:if="${catName!=null}" th:text="'You are in ' + ${catName} + ' section'" ></h1>
+        <div th:each="temp : ${items}" class="item">
+            <img th:src="${temp.imageURL}" th:alt="${temp.name}" >
+            <form th:action="@{'/item/'+${temp.id}}" method="POST">
+                <div>
+                    <button type="submit" th:text="${temp.name}"></button>
+                </div>
+            </form>
+            <h3 th:text="'Rs.' + ${temp.cost} + '/-'"></h3>
+        </div>
+    </div>
+</body>
+</html>

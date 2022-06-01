@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pet-Store</a> &gt; <a href="index.source.html" class="el_package">com.sahith.services.implementations</a> &gt; <span class="el_source">CustomerServiceImpl.java</span></div><h1>CustomerServiceImpl.java</h1><pre class="source lang-java linenums">package com.sahith.services.implementations;
+
+import com.sahith.dao.CustomerRepository;
+import com.sahith.entity.Customer;
+import com.sahith.services.interfaces.CustomerService;
+import com.sahith.utilities.CustomerSignUp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L17">public class CustomerServiceImpl implements CustomerService {</span>
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Override
+    public List&lt;Customer&gt; findAll() {
+<span class="fc" id="L27">        return customerRepository.findAll();</span>
+    }
+
+    @Override
+    public void save(CustomerSignUp customer) {
+<span class="nc" id="L32">        Customer customerEntity = new Customer(customer);</span>
+<span class="nc" id="L33">        save(customerEntity);</span>
+<span class="nc" id="L34">    }</span>
+
+    @Override
+    public void save(Customer customer) {
+<span class="fc" id="L38">        customerRepository.save(encodePassword(customer));</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public void deleteCustomer(int id) {
+<span class="fc" id="L43">        customerRepository.deleteById(id);</span>
+<span class="fc" id="L44">    }</span>
+
+    @Override
+    public Customer findCustomerById(int id) {
+<span class="fc" id="L48">        Optional&lt;Customer&gt; result = customerRepository.findById(id);</span>
+<span class="fc" id="L49">        Customer customer = null;</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if(result.isPresent()) {</span>
+<span class="fc" id="L51">            customer = result.get();</span>
+        }
+        else {
+<span class="fc" id="L54">            throw new RuntimeException(&quot;Did not find Customer Id - &quot; + id);</span>
+        }
+<span class="fc" id="L56">        return customer;</span>
+    }
+
+    @Override
+    public Customer encodePassword(Customer customer){
+<span class="fc" id="L61">        customer.setPassword(passwordEncoder.encode(customer.getPassword()));</span>
+<span class="fc" id="L62">        return customer;</span>
+    }
+
+    public boolean isNewEmail(String email) {
+<span class="nc" id="L66">        List&lt;Customer&gt; customerList = findAll();</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(customerList == null)</span>
+<span class="nc" id="L68">            return true;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        for (Customer customer : customerList) {</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            if(customer.getEmail().equals(email))</span>
+<span class="nc" id="L71">                return false;</span>
+<span class="nc" id="L72">        }</span>
+<span class="nc" id="L73">        return true;</span>
+    }
+
+    @Override
+    public Customer findCustomerByEmail(String email) {
+<span class="fc" id="L78">        return customerRepository.findByEmail(email);</span>
+    }
+
+    @Override
+    public String getCurrentUserEmail() {
+<span class="nc" id="L83">        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span>
+        String username;
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (principal instanceof UserDetails) {</span>
+<span class="nc" id="L86">            username = ((UserDetails)principal).getUsername();</span>
+        } else {
+<span class="nc" id="L88">            username = principal.toString();</span>
+        }
+<span class="nc" id="L90">        return username;</span>
+    }
+
+    @Override
+    public int getCustomerIdByEmail(String email) {
+<span class="fc" id="L95">        return findCustomerByEmail(email).getId();</span>
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

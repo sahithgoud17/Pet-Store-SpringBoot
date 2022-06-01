@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pet-Store</a> &gt; <a href="index.source.html" class="el_package">com.sahith.services.implementations</a> &gt; <span class="el_source">OrderServiceImpl.java</span></div><h1>OrderServiceImpl.java</h1><pre class="source lang-java linenums">package com.sahith.services.implementations;
+
+import com.sahith.dao.CustomerRepository;
+import com.sahith.dao.OrderRepository;
+import com.sahith.entity.Customer;
+import com.sahith.entity.Order;
+import com.sahith.services.interfaces.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L15">public class OrderServiceImpl implements OrderService {</span>
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Override
+    public List&lt;Order&gt; findAll() {
+<span class="fc" id="L25">        return orderRepository.findAll();</span>
+    }
+
+    @Override
+    public Order findOrderById(int id) {
+<span class="fc" id="L30">        Optional&lt;Order&gt; result = orderRepository.findById(id);</span>
+<span class="fc" id="L31">        Order order = null;</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if(result.isPresent()) {</span>
+<span class="fc" id="L33">            order = result.get();</span>
+        }
+        else {
+<span class="fc" id="L36">            throw new RuntimeException(&quot;Did not find Order Id - &quot; + id);</span>
+        }
+<span class="fc" id="L38">        return order;</span>
+    }
+
+    @Override
+    public List&lt;Order&gt; getCustomerOrders(Integer customerId) {
+<span class="fc" id="L43">        return orderRepository.findByCustomerIdAndIsPlaced(customerId, true);</span>
+    }
+
+    @Override
+    public List&lt;Order&gt; getCustomerCart(Integer customerId) {
+<span class="fc" id="L48">        return orderRepository.findByCustomerIdAndIsPlaced(customerId, false);</span>
+    }
+
+    @Override
+    public void save(Order order) {
+<span class="fc" id="L53">        orderRepository.save(order);</span>
+<span class="fc" id="L54">    }</span>
+
+    @Override
+    public void createOrder(int customerId) {
+<span class="nc" id="L58">        Optional&lt;Customer&gt; customerResult = customerRepository.findById(customerId);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if(customerResult.isPresent()) {</span>
+<span class="nc" id="L60">            Customer customer = customerResult.get();</span>
+<span class="nc" id="L61">            Order order = new Order(false, customer, new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L62">            save(order);</span>
+        }
+<span class="nc" id="L64">    }</span>
+
+    @Override
+    public void createOrder(String email) {
+<span class="nc" id="L68">        Customer customer = customerRepository.findByEmail(email);</span>
+<span class="nc" id="L69">        Order order = new Order(false, customer, new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L70">        save(order);</span>
+<span class="nc" id="L71">    }</span>
+
+    @Override
+    public Order findCartOrder(int customerId) {
+<span class="fc" id="L75">        List&lt;Order&gt; orders = orderRepository.findByCustomerIdAndIsPlaced(customerId, false);</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if(orders.isEmpty())</span>
+<span class="nc" id="L77">            return null;</span>
+<span class="fc" id="L78">        return orders.get(0);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
